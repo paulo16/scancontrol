@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import vMultiselectListbox from 'vue-multiselect-listbox'
 
+Vue.component('v-multiselect-listbox', vMultiselectListbox)
 Vue.use(VueRouter);
 /*
     Import des composants
