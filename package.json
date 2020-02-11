@@ -24,7 +24,11 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
+        "babel-runtime": "^6.26.0",
+        "vue-instant-pdf-viewer": "^1.0.2",
         "vue-multiselect-listbox": "0.0.18",
-        "vue-router": "^3.1.5"
+        "vue-pdf": "^4.0.7",
+        "vue-router": "^3.1.5",
+        "vue-table-dynamic": "0.0.9"
     }
 }

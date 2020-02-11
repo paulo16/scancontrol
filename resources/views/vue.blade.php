@@ -11,6 +11,7 @@
     <title>{{ config('app.name', 'scancontrol') }}</title>
 
     <!-- Scripts -->
+    <script src="{{asset('assets/libs/PDFObject/pdfobject.min.js')}}"></script> 
     <script src="{{ asset('js/app.js') }}" defer></script>
 
     <!-- App favicon -->
@@ -39,7 +40,7 @@
 <!-- ============================================================== -->
 
 <div id="app" class="wrapper">
-    <div class="container-fluid">
+    <div>
             
          <app></app>     
 

@@ -1,9 +1,9 @@
 <template>
-    <div>
+    <div class="container-fluid">
 
         <!-- start page title -->
         <div class="row">
-            <div class="col-12">
+            <div class="col-md-12">
                 <div class="page-title-box">
                     <div class="page-title-right">
                     </div>
@@ -30,12 +30,12 @@
                         </form>
                         <br><br>
                         <hr>
-                        <form class="form-inline" role="form" id="form_champindexation" @submit="getlesentetes" method="post">
+                        <form class="form-inline" role="form" id="form_agarder" @submit="champsasave">
                             <div class="form-group row">
                                 <label class="col-sm-4  col-form-label" for="example-fileinput">Selectionner les champs à garder pour le contrôle de l'indexation</label>
-                                <v-multiselect-listbox :options="champsindexations"></v-multiselect-listbox>
+                                <v-multiselect-listbox v-model="champsagarder" :options="champsindexations"></v-multiselect-listbox>
                             </div>
-                            <button class="btn btn-primary waves-effect waves-light col-sm-2" size="large" type="submit">sauvegarder les champs</button>
+                            <button class="btn btn-primary waves-effect waves-light col-sm-2" size="large" >sauvegarder les champs</button>
                         </form>
                     </div>
                 </div>
@@ -54,7 +54,8 @@ import axios from 'axios'
 export default {
   data () {
     return {
-      champsindexations: [],
+      champsindexations: [], //permet d'affichers la liste des chmaps pris depuis excel
+      champsagarder: [], //permet de recupérer les champs choisi 
       exel_ref: '',
     }
   },
@@ -62,6 +63,10 @@ export default {
 
     getfile(){
       this.exel_ref = document.getElementById('fileexcel').files[0]
+    },
+    champsasave(e){
+        e.preventDefault()
+        console.log(this.champsagarder)
     },
 
     getlesentetes(e){

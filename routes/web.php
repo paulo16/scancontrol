@@ -17,4 +17,8 @@ Route::get('/', function (){
 
 Route::get('/{any?}', function (){
     return view('vue');
-})->where('any', '[\/\w\.-]*');
+})->where('any', '[A-Za-z0-9]+')->name("any");
+
+Route::get('/scanpdf', function (){
+    return view('vue');
+})->name('scanpdf');

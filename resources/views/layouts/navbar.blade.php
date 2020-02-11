@@ -68,11 +68,11 @@
                         <ul class="navigation-menu">
 
                             <li class="has-submenu">
-                                <a href="index.html"><i class="mdi mdi-view-dashboard"></i>Dashboard</a>
+                                <a href="/"><i class="mdi mdi-view-dashboard"></i>Dashboard</a>
                             </li>
 
                             <li class="has-submenu">
-                                <a href="#"> <i class="mdi mdi-invert-colors"></i>User Interface </a>
+                                <a href="{{route('scanpdf')}}"> <i class="mdi mdi-invert-colors"></i>Pdf Contrôle </a>
                             </li>
 
                             <li class="has-submenu">

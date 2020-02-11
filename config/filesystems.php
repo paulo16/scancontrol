@@ -64,6 +64,11 @@ return [
             'url' => env('AWS_URL'),
         ],
 
+        'scan_pdf' => [
+        'driver' => 'local',
+        'root'   => storage_path('app/1-Les_scans'),
+       ],
+
     ],
 
 ];
