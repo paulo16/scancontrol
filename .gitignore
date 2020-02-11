@@ -1,5 +1,6 @@
 /node_modules
 /public/hot
+/public/1-Les_scans
 /public/storage
 /storage/*.key
 /vendor
