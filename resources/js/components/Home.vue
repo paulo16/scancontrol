@@ -67,6 +67,22 @@ export default {
     champsasave(e){
         e.preventDefault()
         console.log(this.champsagarder)
+        let elements =this.champsagarder.join(';')
+
+        let routeUrl = route('saveenetetes')
+        let data = new FormData()
+        data.append('entetes',elements)
+
+        axios.post(routeUrl,data).then(response => {
+          //console.log(response.data)
+          let Laravelreponse = response.data
+          //this.champsindexations =Object.values(Laraveldataentetes);
+          console.log(Laravelreponse)
+        }).catch(e => {
+            //this.errors.push(e)
+           console.log(e)
+        })
+        
     },
 
     getlesentetes(e){
@@ -75,7 +91,7 @@ export default {
       //console.log('je suis ici')
       let data = new FormData();
       let fichierxcel = this.exel_ref
-      console.log(this.exel_ref)
+      //console.log(this.exel_ref)
       data.append('fichierexcel', fichierxcel)
       data.append('nom_fichier',fichierxcel.name);
       //data.append('_method', 'POST');
@@ -84,7 +100,7 @@ export default {
         //console.log(response.data)
         let Laraveldataentetes = response.data.lesentetes
         this.champsindexations =Object.values(Laraveldataentetes);
-        console.log(this.champsindexations)
+        //console.log(this.champsindexations)
       }).catch(e => {
         //this.errors.push(e)
         console.log(e)

@@ -1997,6 +1997,19 @@ __webpack_require__.r(__webpack_exports__);
     champsasave: function champsasave(e) {
       e.preventDefault();
       console.log(this.champsagarder);
+      var elements = this.champsagarder.join(';');
+      var routeUrl = route('saveenetetes');
+      var data = new FormData();
+      data.append('entetes', elements);
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.post(routeUrl, data).then(function (response) {
+        //console.log(response.data)
+        var Laravelreponse = response.data; //this.champsindexations =Object.values(Laraveldataentetes);
+
+        console.log(Laravelreponse);
+      })["catch"](function (e) {
+        //this.errors.push(e)
+        console.log(e);
+      });
     },
     getlesentetes: function getlesentetes(e) {
       var _this = this;
@@ -2005,16 +2018,15 @@ __webpack_require__.r(__webpack_exports__);
       var routeUrl = route('lesentetes'); //console.log('je suis ici')
 
       var data = new FormData();
-      var fichierxcel = this.exel_ref;
-      console.log(this.exel_ref);
+      var fichierxcel = this.exel_ref; //console.log(this.exel_ref)
+
       data.append('fichierexcel', fichierxcel);
       data.append('nom_fichier', fichierxcel.name); //data.append('_method', 'POST');
 
       axios__WEBPACK_IMPORTED_MODULE_1___default.a.post(routeUrl, data).then(function (response) {
         //console.log(response.data)
         var Laraveldataentetes = response.data.lesentetes;
-        _this.champsindexations = Object.values(Laraveldataentetes);
-        console.log(_this.champsindexations);
+        _this.champsindexations = Object.values(Laraveldataentetes); //console.log(this.champsindexations)
       })["catch"](function (e) {
         //this.errors.push(e)
         console.log(e);
@@ -2088,6 +2100,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2097,6 +2111,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      htmlchamps: '',
       pdf_dossiers: '',
       url: 'https://bitcoin.org/bitcoin.pdf',
       les_pdfs: [],
@@ -2136,8 +2151,17 @@ __webpack_require__.r(__webpack_exports__);
       axios.post(routeUrl, data1).then(function (response) {
         // response.data contient url vers le pdf
         //console.log(response.data)
-        var Laravelpdf = response.data;
-        _this.url = Laravelpdf; //console.log(Laravelpdf)
+        var Laravelpdf = response.data.pdf_url;
+        _this.url = Laravelpdf;
+        console.log(Laravelpdf);
+        console.log(response.data.pdf_champs);
+        var leschamps = response.data.pdf_champs;
+        console.log(leschamps);
+        var keyschamps = Object.keys(leschamps);
+
+        for (var key in leschamps) {
+          _this.htmlchamps += '<div class="col-xs-3">' + '<label for="ex2">' + key + '</label><input class="form-control" value=' + leschamps[key] + '  type="text"></div>';
+        }
       })["catch"](function (e) {
         //this.errors.push(e)
         console.log(e);
@@ -2150,23 +2174,22 @@ __webpack_require__.r(__webpack_exports__);
       var routeUrl = route('lespdfs'); //console.log('je suis ici')
 
       var data = new FormData();
-      var fichierxcel = this.exel_ref;
-      console.log(this.exel_ref);
-      console.log(this.pdf_dossiers);
+      var fichierxcel = this.exel_ref; //console.log(this.exel_ref)
+      //console.log(this.pdf_dossiers)
+
       data.append('fichierexcel', fichierxcel);
       data.append('nom_fichier', fichierxcel.name);
       data.append('dossier_cible', this.pdf_dossiers); //data.append('_method', 'POST');
 
       axios.post(routeUrl, data).then(function (response) {
-        console.log(response.data);
+        //console.log(response.data)
         var Laravelpdfs = response.data.les_pdfs;
         _this2.les_pdfs = Laravelpdfs;
 
         for (var i = 0; i < Laravelpdfs.length; i++) {
           _this2.params.data.push([Laravelpdfs[i].nom_pdf]);
-        }
+        } //console.log(Laravelpdfs[1].nom_pdf)
 
-        console.log(Laravelpdfs[1].nom_pdf);
       })["catch"](function (e) {
         //this.errors.push(e)
         console.log(e);
@@ -38588,7 +38611,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container-fluid" }, [
+  return _c("div", [
     _vm._m(0),
     _vm._v(" "),
     _c("div", [
@@ -38682,11 +38705,19 @@ var render = function() {
       _c(
         "div",
         { staticClass: "col-md-6" },
-        [_c("vue-pdf-viewer", { attrs: { url: _vm.url } })],
+        [_c("vue-pdf-viewer", { attrs: { url: _vm.url, height: "500px" } })],
         1
       ),
       _vm._v(" "),
-      _vm._m(2)
+      _c("div", { staticClass: "col-md-3" }, [
+        _c("p", [_vm._v("LES CHAMPS INDEXATION")]),
+        _vm._v(" "),
+        _c("div", {
+          staticStyle: { height: "400px", "overflow-y": "scroll" },
+          attrs: { name: "champsdiv", id: "champsdiv" },
+          domProps: { innerHTML: _vm._s(_vm.htmlchamps) }
+        })
+      ])
     ])
   ])
 }
@@ -38720,14 +38751,6 @@ var staticRenderFns = [
         },
         [_vm._v("Soumettre le choix ")]
       )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-3" }, [
-      _c("p", [_vm._v("LES CHAMPS ")])
     ])
   }
 ]
@@ -54112,15 +54135,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!*********************************************!*\
   !*** ./resources/js/components/Scanpdf.vue ***!
   \*********************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Scanpdf_vue_vue_type_template_id_4f19178c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Scanpdf.vue?vue&type=template&id=4f19178c& */ "./resources/js/components/Scanpdf.vue?vue&type=template&id=4f19178c&");
 /* harmony import */ var _Scanpdf_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Scanpdf.vue?vue&type=script&lang=js& */ "./resources/js/components/Scanpdf.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _Scanpdf_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _Scanpdf_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -54150,7 +54172,7 @@ component.options.__file = "resources/js/components/Scanpdf.vue"
 /*!**********************************************************************!*\
   !*** ./resources/js/components/Scanpdf.vue?vue&type=script&lang=js& ***!
   \**********************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

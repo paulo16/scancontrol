@@ -1,16 +1,16 @@
 <template>
-    <div class="container-fluid">
-       <!-- start page title -->
-       <div class="row">
-           <div class="col-md-12">
-               <div class="page-title-box">
-                   <div class="page-title-right">
-                   </div>
-                   <h4 class="page-title">CONTRÔLE DE SCANS</h4>
-               </div>
-           </div>
-       </div>
-       <div>       
+    <div>
+     <!-- start page title -->
+     <div class="row">
+         <div class="col-md-12">
+             <div class="page-title-box">
+                 <div class="page-title-right">
+                 </div>
+                 <h4 class="page-title">CONTRÔLE DE SCANS</h4>
+             </div>
+         </div>
+     </div>
+     <div>       
         <form  @submit="getlesPdfs" method="post">
             <div class="form-row">
                 <div class="col-md-4 mb-2">
@@ -39,11 +39,13 @@
             </div>
         </div>
         <div class="col-md-6">
-            <vue-pdf-viewer :url="url">
+            <vue-pdf-viewer :url="url" height="500px">
             </vue-pdf-viewer>
         </div>
         <div class="col-md-3">
-            <p>LES CHAMPS </p>
+            <p>LES CHAMPS INDEXATION</p>
+            <div  v-html="htmlchamps" name="champsdiv" id="champsdiv" style="height: 400px; overflow-y: scroll;">
+            </div>
         </div>
     </div>
 </div>
@@ -61,6 +63,7 @@ export default {
     },
     data () {
         return {
+            htmlchamps : '',
             pdf_dossiers :'',
             url: 'https://bitcoin.org/bitcoin.pdf',
             les_pdfs: [],
@@ -87,7 +90,7 @@ export default {
       },
 
     getChampsindexation(index ,data){
-        
+
         let lepdfalire = this.pdf_dossiers+"\\"+data
         //console.log('Row click')
         //console.log(this.url)
@@ -100,13 +103,22 @@ export default {
         data1.append('pdf_chemincomplet', lepdfalire)
         data1.append('pdf_nomsimple', data)
           //data.append('_method', 'POST');
-        axios.post(routeUrl,data1)
-          .then(response => {
+          axios.post(routeUrl,data1).then(response => {
             // response.data contient url vers le pdf
             //console.log(response.data)
-            let Laravelpdf = response.data
+            let Laravelpdf = response.data.pdf_url
             this.url =Laravelpdf;
-            //console.log(Laravelpdf)
+            console.log(Laravelpdf)
+            console.log(response.data.pdf_champs)
+            let leschamps = response.data.pdf_champs
+            console.log(leschamps)
+            let keyschamps = Object.keys(leschamps)
+
+            for(var key in leschamps) {
+                this.htmlchamps += '<div class="col-xs-3">'+'<label for="ex2">'+key+
+                '</label><input class="form-control" value='+leschamps[key]+'  type="text"></div>'
+            }
+
         }).catch(e => {
                 //this.errors.push(e)
                 console.log(e)
@@ -114,32 +126,31 @@ export default {
           //console.log('renome ok')
       },
 
-      getlesPdfs(e){
+    getlesPdfs(e){
           e.preventDefault()
           var routeUrl = route('lespdfs')
-      //console.log('je suis ici')
-      let data = new FormData();
-      let fichierxcel = this.exel_ref
-      console.log(this.exel_ref)
-      console.log(this.pdf_dossiers)
-      data.append('fichierexcel', fichierxcel)
-      data.append('nom_fichier',fichierxcel.name);
-      data.append('dossier_cible',this.pdf_dossiers);
-      //data.append('_method', 'POST');
-      axios.post(routeUrl,data)
-      .then(response => {
-        console.log(response.data)
-        let Laravelpdfs = response.data.les_pdfs
-        this.les_pdfs =Laravelpdfs;
-        for (let i = 0; i < Laravelpdfs.length; i++) {
-            this.params.data.push([Laravelpdfs[i].nom_pdf])
-        }
-        console.log(Laravelpdfs[1].nom_pdf)
-    }).catch(e => {
-        //this.errors.push(e)
-        console.log(e)
-    })
-      //console.log('renome ok')
+          //console.log('je suis ici')
+          let data = new FormData();
+          let fichierxcel = this.exel_ref
+          //console.log(this.exel_ref)
+          //console.log(this.pdf_dossiers)
+          data.append('fichierexcel', fichierxcel)
+          data.append('nom_fichier',fichierxcel.name);
+          data.append('dossier_cible',this.pdf_dossiers);
+          //data.append('_method', 'POST');
+          axios.post(routeUrl,data).then(response => {
+            //console.log(response.data)
+            let Laravelpdfs = response.data.les_pdfs
+            this.les_pdfs =Laravelpdfs;
+            for (let i = 0; i < Laravelpdfs.length; i++) {
+                this.params.data.push([Laravelpdfs[i].nom_pdf])
+            }
+            //console.log(Laravelpdfs[1].nom_pdf)
+        }).catch(e => {
+                //this.errors.push(e)
+                console.log(e)
+            })
+          //console.log('renome ok')
   }
 }
 }

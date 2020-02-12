@@ -68,24 +68,11 @@
                         <ul class="navigation-menu">
 
                             <li class="has-submenu">
-                                <a href="/"><i class="mdi mdi-view-dashboard"></i>Dashboard</a>
+                                <a href="/"><i class="mdi mdi-view-dashboard"></i>ETAPE 1</a>
                             </li>
 
                             <li class="has-submenu">
-                                <a href="{{route('scanpdf')}}"> <i class="mdi mdi-invert-colors"></i>Pdf Contrôle </a>
-                            </li>
-
-                            <li class="has-submenu">
-                                <a href="#">
-                                    <i class="mdi mdi-lifebuoy"></i>Components</a>
-                            </li>
-
-                            <li class="has-submenu">
-                                <a href="#"> <i class="mdi mdi-chart-donut-variant"></i>Charts</a>
-                            </li>
-
-                            <li class="has-submenu">
-                                <a href="#"> <i class="mdi mdi-cards-outline"></i>Pages</a>
+                                <a href="{{route('scanpdf')}}"> <i class="mdi mdi-invert-colors"></i>CONTRÔLE DE PDF </a>
                             </li>
 
                         </ul>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Barryvdh\Debugbar\Facade as Debugbar;
+use Illuminate\Support\Facades\Storage;
 
 class ScanController extends Controller
 {
@@ -31,7 +32,23 @@ class ScanController extends Controller
 
 
 	public function getlespdfs(Request $request){
+		
 		$les_pdfs= array();
+
+        // Handle File Upload
+        if($request->hasFile('fichierexcel')) {
+            // Get filename with extension            
+            $filenameWithExt = $request->file('fichierexcel')->getClientOriginalName();
+            // Get just filename
+            $filename = "fichierexcel" ;//pathinfo($filenameWithExt, PATHINFO_FILENAME)            
+           // Get just ext
+            $extension = $request->file('fichierexcel')->getClientOriginalExtension();
+            //Filename to store
+            $fileNameToStore = $filename.'.'.$extension;                       
+          // Upload Image
+            $path = $request->file('fichierexcel')->storeAs(null,$fileNameToStore);
+        } 
+
 
 		if($request->get('dossier_cible')){
            		$path_to_directory = $request->get('dossier_cible');
@@ -67,8 +84,63 @@ class ScanController extends Controller
 
     		}
     	}
+
+    	$pdf_champs = array();
+
+    	if($fichier=Storage::disk('local')->path('fichierexcel.xlsx')){
+    		$sheet = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+    		$sheet = $sheet->load($fichier);
+
+    		$highestRow = $sheet->getActiveSheet()->getHighestRow(); 
+    		$highestColumn = $sheet->getActiveSheet()->getHighestColumn();
+
+    		$columnLoopLimiter = $highestColumn;
+    		++$columnLoopLimiter;
+            // get the column headings as a simple array indexed by column name
+    		$headings = $sheet->getActiveSheet()->rangeToArray('A1:' . $highestColumn . 1, NULL, TRUE, FALSE, TRUE)[1];
+    		$col_chemin =array_search('chemin', $headings);
+    		$lettre_chemin_pdf = $col_chemin;
+    		$rowdebut= 2;
+
+    		$rowData = $sheet->getActiveSheet()->rangeToArray($lettre_chemin_pdf. $rowdebut . ':' . $lettre_chemin_pdf. $highestRow , NULL, TRUE, FALSE, TRUE);
+
+    		$rowAllData = $sheet->getActiveSheet()->rangeToArray("A". $rowdebut . ':' . $lettre_chemin_pdf. $highestRow , NULL, TRUE, FALSE, TRUE);
+            Debugbar::info($rowData);
+            //  Loop through each data row of the worksheet in turn
+    		for ($row = 2; $row <= $highestRow; $row++)
+    		{ 
+    			if (!empty($rowData[$row][$lettre_chemin_pdf]) && (strtolower($request->get('pdf_nomsimple')) == strtolower(
+
+    				$rowData[$row][$lettre_chemin_pdf]))) {
+
+                    $values = $rowAllData[$row]; 
+                    $new = array_combine(preg_replace(array_map(function($s){return "/^$s$/";}, 
+                                                 array_keys($headings)),$headings, array_keys($values)), $values);
+                    Debugbar::info($new);
+    				$pdf_champs = $new;
+    				break;
+    			}
+    		}
+
+    	}else{
+
+    	}
  
-        return response()->json($url);
+        return response()->json(['pdf_url'=>$url, "pdf_champs"=>$pdf_champs]);
+
+	}
+
+	public function saveenetetesinfile(Request $request){
+
+		if($request->get('entetes')){
+
+			Storage::disk('local')->put('entetes.txt', $request->get('entetes'));
+
+			return response()->json(["msg"=>"save ok"]);
+
+		}
+
+		return  response()->json(["msg"=>"not save"]);
 
 	}
 

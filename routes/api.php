@@ -20,3 +20,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('/lesentetes', 'ScanController@getentetes')->name('lesentetes');
 Route::post('/lespdfs', 'ScanController@getlespdfs')->name('lespdfs');
 Route::post('/lirepdf', 'ScanController@getPdfbyName')->name('urlpdf');
+Route::post('/saveenetetesinfile', 'ScanController@saveenetetesinfile')->name('saveenetetes');
