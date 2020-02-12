@@ -144,4 +144,43 @@ class ScanController extends Controller
 
 	}
 
+	public function savelesremarques(Request $request){
+
+		$namefile='remarques_'.date('d-m-Y').'.csv';
+		$storagePath  = Storage::disk('local')->getDriver()->getAdapter()->getPathPrefix();
+
+		if($request->get('remarques') && $request->get('pdf_ref') ){
+
+            if (!Storage::disk('local')->exists($namefile)) {
+            	
+            	$entetes= '"Nom de Pdf ", "Les Remarques"';
+            	if(Storage::disk('local')->put($namefile, null)){
+                   
+				    $content = '"'.$request->get('pdf_ref').'"'.','.'"'.$request->get('remarques').'"';
+
+				    file_put_contents($storagePath.'/'.$namefile,iconv('UTF-8', 'ASCII//TRANSLIT', $entetes ). "\n", FILE_APPEND);
+				    file_put_contents($storagePath.'/'.$namefile,iconv('UTF-8', 'ASCII//TRANSLIT', $content) . "\n", FILE_APPEND);
+
+            	}
+
+            }else{
+            	//$f = fopen($storagePath.'/'.$namefile , "w");
+				//fputcsv($f, [$request->get('pdf_ref'),$request->get('remarques'),"\r\n"]);
+				$content = '"'.$request->get('pdf_ref').'"'.','.'"'.$request->get('remarques').'"';
+
+				file_put_contents($storagePath.'/'.$namefile,iconv('UTF-8', 'ASCII//TRANSLIT', $content) . "\n", FILE_APPEND);
+            }
+			return response()->json(["remarques"=>"save ok"]);
+
+		}
+
+		return  response()->json(["remarques"=>"not save"]);
+	}
+
+	public function exportremarques(Request $request){
+
+		$namefile='remarques_'.date('d-m-Y').'.csv';
+		return Storage::disk('local')->download($namefile);
+	}
+
 }

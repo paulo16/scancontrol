@@ -22,3 +22,7 @@ Route::get('/{any?}', function (){
 Route::get('/scanpdf', function (){
     return view('vue');
 })->name('scanpdf');
+
+Route::get('/aides', function (){
+    return view('vue');
+})->name('aides');

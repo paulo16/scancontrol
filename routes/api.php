@@ -21,3 +21,6 @@ Route::post('/lesentetes', 'ScanController@getentetes')->name('lesentetes');
 Route::post('/lespdfs', 'ScanController@getlespdfs')->name('lespdfs');
 Route::post('/lirepdf', 'ScanController@getPdfbyName')->name('urlpdf');
 Route::post('/saveenetetesinfile', 'ScanController@saveenetetesinfile')->name('saveenetetes');
+Route::post('/savelesremarques', 'ScanController@savelesremarques')->name('savelesremarques');
+
+Route::get('/exportremarques', 'ScanController@exportremarques')->name('exportremarques');

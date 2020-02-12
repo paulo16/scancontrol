@@ -10,6 +10,7 @@ Vue.use(VueRouter);
 import Home from './components/Home.vue';
 //import Scan from './components/Scan.vue';
 import Scanpdf from './components/Scanpdf.vue';
+import Aides from './components/Aides.vue';
 
 export default new VueRouter({
   mode: 'history',
@@ -23,6 +24,11 @@ export default new VueRouter({
       path: '/scanpdf',
       name: 'Scanpdf',
       component: Scanpdf
+    },
+    {
+      path: '/aides',
+      name: 'Aides',
+      component: Aides
     }
   ]
 })

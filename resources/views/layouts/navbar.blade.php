@@ -21,7 +21,7 @@
                             <a class="nav-link dropdown-toggle nav-user mr-0 waves-effect" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                                 <img src="assets/images/users/user-1.jpg" alt="user-image" class="rounded-circle">
                                 <span class="pro-user-name ml-1">
-                                    Nowak <i class="mdi mdi-chevron-down"></i> 
+                                    Contrôleur 
                                 </span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
@@ -73,6 +73,10 @@
 
                             <li class="has-submenu">
                                 <a href="{{route('scanpdf')}}"> <i class="mdi mdi-invert-colors"></i>CONTRÔLE DE PDF </a>
+                            </li>
+
+                            <li class="has-submenu">
+                                <a href="{{route('aides')}}"> <i class="mdi mdi-invert-colors"></i>AIDES</a>
                             </li>
 
                         </ul>
